@@ -6,7 +6,8 @@ def init():
     LPORT = -1
 
     global VICTIM_LIST
-    VICTIM_LIST = []
+    VICTIM_LIST = [{}]
 
     global VICTIM_CTR
-    VICTIM_CTR = 0
+    #initialize with 1 as the list is initialized with 1 dictionary
+    VICTIM_CTR = 1
