@@ -11,3 +11,6 @@ def init():
     global VICTIM_CTR
     #initialize with 1 as the list is initialized with 1 dictionary
     VICTIM_CTR = 1
+
+    global ALL_CONNECTIONS
+    ALL_CONNECTIONS = []
