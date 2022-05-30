@@ -18,10 +18,10 @@ class RS_Shell(Cmd):
     def do_victims(self, inp):
         'List all current Victims'
         print(Back.MAGENTA + "Listing all current vicitims..." + Style.RESET_ALL)
-        # Minus 1 as the victim list is initialized with one value
-        if (len(settings.VICTIM_LIST) - 1) != 0:
+        
+        if (len(settings.VICTIM_LIST)) != 0:
             for victim in settings.VICTIM_LIST:
-                print(Fore.CYAN + victim['ID'], ":", victim['IP'] + Style.RESET_ALL)
+                print(Fore.CYAN + "Victim " + str(victim['ID']), ":", str(victim['IP']) + Style.RESET_ALL)
         else:
             print(Back.RED + "No victims at this time" + Style.RESET_ALL)
     
