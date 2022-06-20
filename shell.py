@@ -43,6 +43,7 @@ class RS_Shell(Cmd):
             print("LHOST: ", settings.LHOST)
             print("LPORT: ", settings.LPORT)
         else:
+            print("Listening on address", settings.LHOST, "on port", settings.LPORT)
             listener.listen(settings.LHOST, settings.LPORT)
 
 
