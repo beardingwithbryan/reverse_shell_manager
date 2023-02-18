@@ -86,6 +86,7 @@ def send(cmd):
                 sys.stdout.write(ans)
                 print("")
                 print(Fore.GREEN+"All info gathered"+Style.RESET_ALL)
+                print(Fore.GREEN+"Press Enter to Continue"+Style.RESET_ALL)
                 
 
             else:
